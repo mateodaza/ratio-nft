@@ -104,7 +104,6 @@ contract RatioNFT is ERC1155, Ownable {
       require(totalRaised < goalAmount, "Goal already met");
       // Set the minimum amount to 1 token 
       uint _minAmount = 1*(10**18);
-      // Here we validate if sended USDT for example is higher than 50, and if so we increment the counter
       require(_amount >= _minAmount, "Amount less than minimum amount");
       // I call the function of IERC20 contract to transfer the token from the user (that he's interacting with the contract) to
       // the smart contract  

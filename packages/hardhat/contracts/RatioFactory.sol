@@ -2,7 +2,7 @@ pragma solidity ^0.8.4;
 
 import "./RatioNFT.sol";
 
-contract FactoryERC1155 {
+contract RatioFactory {
 
     RatioNFT[] public tokens; //an array that contains different ERC1155 tokens deployed
     mapping(uint256 => address) public indexToContract; //index to contract address mapping

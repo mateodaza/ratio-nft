@@ -19,8 +19,8 @@ contract RatioFactory {
     _ids - IDs the ERC1155 token should contain
     _name - Names each ID should map to. Case-sensitive.
     */
-    function deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount) public returns (address) {
-        RatioNFT t = new RatioNFT(_contractName, _uri, _goalAmount);
+    function deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _paymentToken) public returns (address) {
+        RatioNFT t = new RatioNFT(_contractName, _uri, _goalAmount, _paymentToken);
         tokens.push(t);
         indexToContract[tokens.length - 1] = address(t);
         indexToOwner[tokens.length - 1] = tx.origin;

@@ -15,7 +15,7 @@ contract RatioNFT is ERC1155, Ownable {
     uint public goalAmount;
     uint public totalRaised;
     bool public goalMet = false;
-    address paymentToken = 0x6b15A1104c7Fa74c8f6C7349D5A924C896a6ee44; // Fake DAI Mumbai
+    address paymentToken; // Fake DAI 
     address rewardToken;
 
     mapping(string => uint) public nameToId; //name to id mapping
@@ -26,10 +26,10 @@ contract RatioNFT is ERC1155, Ownable {
     /*
     constructor is executed when the factory contract calls its own deployERC1155 method
     */
-    constructor(string memory _contractName, string memory _uri, uint _goalAmount) ERC1155(_uri) {
+    constructor(string memory _contractName, string memory _uri, uint _goalAmount, address _paymentToken) ERC1155(_uri) {
         names = ["NFT", "FRACTIONS"];
         ids = [0, 1];
-        // paymentToken = _paymentToken;
+        paymentToken = _paymentToken;
         goalAmount = _goalAmount;
         createMapping();
         setURI(_uri);
@@ -77,19 +77,6 @@ contract RatioNFT is ERC1155, Ownable {
         mintFee = _fee;
     }
 
-        /*
-    mintRatio(address account, uint _id, uint256 amount)
-
-    account - address to mint the token to
-    _id - the ID being minted
-    amount - amount of tokens to mint
-    */
-    function mintRatio(address account, uint _id, uint256 amount) 
-        public payable onlyOwner returns (uint)
-    {
-        _mint(account, _id, amount, "");
-        return _id;
-    }
 
     // Use transfer method to withdraw an amount of money and for updating automatically the balance
     function withdrawAllFundsToAddress(address _to) public onlyOwner {
@@ -99,19 +86,24 @@ contract RatioNFT is ERC1155, Ownable {
         tokenContract.transfer(_to, tokenContract.balanceOf(address(this)));
     }
 
-    function deposit(uint _amount) public payable {
+    function getAllowance() public view returns(uint256){
+       return IERC20(paymentToken).allowance(msg.sender, address(this));
+   }
+
+    function deposit(uint _amount) public payable{
       // Check if goal is fulfilled
       require(totalRaised < goalAmount, "Goal already met");
       // Set the minimum amount to 1 token 
       uint _minAmount = 1*(10**18);
       require(_amount >= _minAmount, "Amount less than minimum amount");
-      // I call the function of IERC20 contract to transfer the token from the user (that he's interacting with the contract) to
-      // the smart contract  
+
+      require(_amount >= getAllowance(), "Please approve tokens before transferring");
       IERC20(paymentToken).transferFrom(msg.sender, address(this), _amount);
+
       // assigns supporter to map
       supporters[msg.sender] = _amount;
       // increases raised
-      totalRaised += _amount;
+      totalRaised += _amount / 10**18;
       if(totalRaised >= goalAmount) goalMet = true;
     }
 
@@ -127,7 +119,7 @@ contract RatioNFT is ERC1155, Ownable {
 
     function claimFractions() public returns(uint){
       require(goalMet == true, "Funding goal haven't been met");
-      uint fractions = supporters[msg.sender] / totalRaised * 100;
+      uint fractions = (supporters[msg.sender] / 10**18 ) / totalRaised * 100;
       require(fractions != supportersClaims[msg.sender], "User already claimed");
       _mint(msg.sender, 1, fractions, "");
       supportersClaims[msg.sender] = fractions;

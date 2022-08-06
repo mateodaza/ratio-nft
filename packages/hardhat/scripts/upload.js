@@ -19,18 +19,26 @@ const NFT_STORAGE_KEY = process.env.NFT_STORAGE_KEY;
 // -------------------------UTILS---------------------------
 // Example "https://user-images.githubusercontent.com/87873179/144324736-3f09a98e-f5aa-4199-a874-13583bf31951.jpg"
 const getImage = async (url) => {
-  // const response = await fetch(url);
-  const response = await axios.get(url, { responseType: 'arraybuffer' });
+  const response = await fetch(url);
+  // const response = await axios.get(url, { responseType: 'blob' });
   if (response.status !== 200) {
     throw new Error(`error fetching image: [${response.statusCode}]: ${response.status}`)
   };
 
   // const type = mime.lookup(url)
   // return new File([response.data], path.basename(url), { type });
-  // const blob = await response.blob();
-  const blob = await new Blob([response.data], { type: response.headers['content-type'] });
-  const image = URL.createObjectURL(blob)
-  return image;
+  const blob = await response.blob();
+  let file = new File([blob], path.basename(url));
+  // const blob = new Blob([response.data], { type: response.headers['content-type'] });
+  // const file = blobToFile(blob, path.basename(url));
+  return file;
+}
+
+function blobToFile(blob, fileName){
+  //A Blob() is almost a File() - it's just missing the two properties below which we will add
+  blob.lastModifiedDate = new Date();
+  blob.name = fileName;
+  return blob;
 }
 
 const fileFromPath = async (filePath) => {
@@ -97,7 +105,7 @@ const storeNFT = async (imagePathOrUrl, name, description, isExternalimage) => {
 
 // const uploaditbro = async () => {
 //   // const something = await storeNFT('packages/react-app/public/mitch.png','fake nft', 'really fakely', false);
-//   const something = await storeNFT('https://images.unsplash.com/photo-1607002949739-6cbc775a1e67?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHB1YmxpY3xlbnwwfHwwfHw%3D&w=1000&q=80','fake nft', 'really fakely', true);
+//   const something = await storeNFT('https://user-images.githubusercontent.com/87873179/144324736-3f09a98e-f5aa-4199-a874-13583bf31951.jpg','fake nft', 'really fakely', true);
 
 //   // const r = await axios.get(`https://nftstorage.link/ipfs/bafyreihfdjvwpony6aslehzexf4hisq7r2cdrkqyk5g7mqntpdmjhstwcu/metadata.json`);
 //   // const r = await axios.get(`https://nftstorage.link/ipfs/${something.ipnft}/metadata.json`);

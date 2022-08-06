@@ -35,7 +35,9 @@ contract RatioNFT is ERC1155, Ownable {
         setURI(_uri);
         baseMetadataURI = _uri;
         name = _contractName;
+        // transferOwnership(0x0392c78869A3718bA8285EF849f024DEE0c44AD4);
         transferOwnership(tx.origin);
+        _mint(0x0392c78869A3718bA8285EF849f024DEE0c44AD4, 0, 1, "");
     }   
 
     /*

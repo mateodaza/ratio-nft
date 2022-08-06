@@ -1,10 +1,10 @@
 pragma solidity ^0.8.4;
 
-import "./RatioNFT.sol";
+import "./RatioEdition.sol";
 
 contract RatioFactory {
 
-    RatioNFT[] public tokens; //an array that contains different ERC1155 tokens deployed
+    RatioEdition[] public tokens; //an array that contains different ERC1155 tokens deployed
     mapping(uint256 => address) public indexToContract; //index to contract address mapping
     mapping(uint256 => address) public indexToOwner; //index to ERC1155 owner address
 
@@ -20,7 +20,7 @@ contract RatioFactory {
     _name - Names each ID should map to. Case-sensitive.
     */
     function deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken) public returns (address) {
-        RatioNFT t = new RatioNFT(_contractName, _uri, _goalAmount, _nftAddress, _paymentToken);
+        RatioEdition t = new RatioEdition(_contractName, _uri, _goalAmount, _nftAddress, _paymentToken);
         tokens.push(t); 
         indexToContract[tokens.length - 1] = address(t);
         indexToOwner[tokens.length - 1] = tx.origin;
@@ -72,7 +72,7 @@ contract RatioFactory {
             uint supply
         )
     {
-        RatioNFT token = tokens[_index];
+        RatioEdition token = tokens[_index];
         return (address(token), token.owner(), token.uri(_id), token.balanceOf(indexToOwner[_index], _id));
     }
 }

@@ -40,7 +40,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const Token = await ethers.getContract("ERC20Mock", deployer);
 
-  await deploy("RatioEdition", {
+  await deploy("RatioNFT", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     args: [
@@ -52,16 +52,16 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     waitConfirmations: 5,
   });
 
-  const RatioEditionNFT = await ethers.getContract("RatioEdition", deployer);
+  const NFT = await ethers.getContract("RatioNFT", deployer);
 
-  await deploy("RatioNFT", {
+  await deploy("RatioEdition", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     args: [
       "My Test Ratio NFT",
       "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/",
       10,
-      RatioEditionNFT.address,
+      NFT.address,
       Token.address,
     ],
     log: true,
@@ -79,6 +79,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // Getting a previously deployed contract
   const YourContract = await ethers.getContract("YourContract", deployer);
   // const RatioNFT = await ethers.getContract("RatioNFT", deployer);
+  // const RatioEdition = await ethers.getContract("RatioEdition", deployer);
   // const RatioFactory = await ethers.getContract("RatioFactory", deployer);
   /*  await YourContract.setPurpose("Hello");
   

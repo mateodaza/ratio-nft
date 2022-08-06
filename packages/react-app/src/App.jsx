@@ -319,6 +319,15 @@ function App(props) {
                 and give you a form to interact with it locally
             */}
           <Contract
+            name="RatioEdition"
+            price={price}
+            signer={userSigner}
+            provider={localProvider}
+            address={address}
+            blockExplorer={blockExplorer}
+            contractConfig={contractConfig}
+          />
+          <Contract
             name="ERC20Mock"
             price={price}
             signer={userSigner}

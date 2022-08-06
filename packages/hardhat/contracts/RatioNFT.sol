@@ -15,6 +15,7 @@ contract RatioNFT is ERC1155, Ownable {
     uint public goalAmount;
     uint public totalRaised;
     bool public goalMet = false;
+    address public nft;
     address paymentToken; // Fake DAI 
     address rewardToken;
 
@@ -26,9 +27,10 @@ contract RatioNFT is ERC1155, Ownable {
     /*
     constructor is executed when the factory contract calls its own deployERC1155 method
     */
-    constructor(string memory _contractName, string memory _uri, uint _goalAmount, address _paymentToken) ERC1155(_uri) {
+    constructor(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken) ERC1155(_uri) {
         names = ["NFT", "FRACTIONS"];
         ids = [0, 1];
+        nft = _nftAddress;
         paymentToken = _paymentToken;
         goalAmount = _goalAmount;
         createMapping();
@@ -36,8 +38,8 @@ contract RatioNFT is ERC1155, Ownable {
         baseMetadataURI = _uri;
         name = _contractName;
         // transferOwnership(0x0392c78869A3718bA8285EF849f024DEE0c44AD4);
-        transferOwnership(tx.origin);
-        _mint(0x0392c78869A3718bA8285EF849f024DEE0c44AD4, 0, 1, "");
+        transferOwnership(msg.sender);
+        _mint(msg.sender, 0, 1, "");
     }   
 
     /*
@@ -92,7 +94,7 @@ contract RatioNFT is ERC1155, Ownable {
        return IERC20(paymentToken).allowance(msg.sender, address(this));
    }
 
-    function deposit(uint _amount) public payable{
+    function deposit(uint _amount) public{
       // Check if goal is fulfilled
       require(totalRaised < goalAmount, "Goal already met");
       // Set the minimum amount to 1 token 

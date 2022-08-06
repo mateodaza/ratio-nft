@@ -40,6 +40,20 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const Token = await ethers.getContract("ERC20Mock", deployer);
 
+  await deploy("RatioEdition", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    args: [
+      "My NFT", // NAME
+      "oneNFT", // SYMBOL
+      "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/1.json", // URI
+    ],
+    log: true,
+    waitConfirmations: 5,
+  });
+
+  const RatioEditionNFT = await ethers.getContract("RatioEdition", deployer);
+
   await deploy("RatioNFT", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
@@ -47,6 +61,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
       "My Test Ratio NFT",
       "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/",
       10,
+      RatioEditionNFT.address,
       Token.address,
     ],
     log: true,

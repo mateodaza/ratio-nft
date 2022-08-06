@@ -46,7 +46,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     args: [
       "My NFT", // NAME
       "oneNFT", // SYMBOL
-      "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/1.json", // URI
+      "https://gateway.pinata.cloud/ipfs/xxxx/metadata/api/item/1.json", // URI
     ],
     log: true,
     waitConfirmations: 5,

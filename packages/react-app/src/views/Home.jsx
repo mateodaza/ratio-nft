@@ -1,7 +1,6 @@
-import { useContractReader } from "eth-hooks";
-import { ethers } from "ethers";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { PAYMENT_TOKENS } from "../constants";
 
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
@@ -9,113 +8,92 @@ import { Link } from "react-router-dom";
  * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
  * @returns react component
  **/
-function Home({ yourLocalBalance, readContracts }) {
-  // you can also use hooks locally in your component of choice
-  // in this case, let's keep track of 'purpose' variable from our contract
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
+function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts }) {
+  // const purpose = useContractReader(readContracts, "YourContract", "purpose");
+
+  const { RatioFactory } = writeContracts;
+
+  const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [localImage, setLocalImage] = useState(null);
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [amount, setAmount] = useState(null);
+  const [useDallE, setUseDallE] = useState(false);
+  console.log({ selectedNetwork });
+  const goDallE = async () => {
+    if (!description) return alert("please set a description first");
+    if (!!useDallE) {
+      setUseDallE(false);
+      setGeneratedImage(null);
+      return;
+    }
+    //TODO: Dall-E magic goes here
+    setUseDallE(!useDallE);
+  };
+
+  const mint = async () => {
+    if (!title && !description && !amount) return alert("please fill all the fields");
+    if (!localImage && !generatedImage) return alert("please add or generate an image to use as an NFT");
+    // const ERC1155 = RatioFactory.deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken)
+
+    //Get URI and NFT
+    const uri = "";
+    const nftAddress = "";
+    const ERC1155 = RatioFactory.deployERC1155(
+      title,
+      uri,
+      amount * 10 ** 18,
+      nftAddress,
+      PAYMENT_TOKENS[selectedNetwork],
+    );
+  };
 
   return (
-    <div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>📝</span>
-        This Is Your App Home. You can start editing it in{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          packages/react-app/src/views/Home.jsx
-        </span>
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>✏️</span>
-        Edit your smart contract{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          YourContract.sol
-        </span>{" "}
-        in{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          packages/hardhat/contracts
-        </span>
-      </div>
-      {!purpose ? (
-        <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>👷‍♀️</span>
-          You haven't deployed your contract yet, run
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            yarn chain
-          </span>{" "}
-          and{" "}
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            yarn deploy
-          </span>{" "}
-          to deploy your first contract!
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <img
+        src="https://www.davidhodder.com/wp-content/uploads/2018/01/GoldenRatioPNG3000.png"
+        width="250px"
+        style={{ margin: "20px 0", objectFit: "contain", maxHeight: "300px" }}
+      />
+      <hr style={{ borderTop: "2px solid lightgray", width: "25%" }} />
+      <div style={{ display: "flex", flexDirection: "column", width: "50%", margin: "20px 0", alignItems: "center" }}>
+        <input
+          placeholder="nft title"
+          className="minimal-input required"
+          type="text"
+          onChange={e => setTitle(e.target.value)}
+        />
+        <input
+          placeholder="a very short description"
+          className="minimal-input required"
+          type="text"
+          onChange={e => setDescription(e.target.value)}
+        />
+        <input
+          placeholder="dai $"
+          className="minimal-input required"
+          type="number"
+          min="0"
+          onChange={e => setAmount(e.target.value)}
+        />
+        {!useDallE && (
+          <input
+            type="file"
+            id="image-input"
+            accept="image/jpeg, image/png, image/jpg"
+            style={{ margin: "20px 0 20px 60px" }}
+          />
+        )}
+        <div style={{ margin: "20px 0" }}>
+          <label className="switch">
+            <input type="checkbox" checked={useDallE} onChange={() => goDallE()} />
+            <span className="slider round"></span>
+          </label>
+          <p style={{ margin: "10px 0" }}>or generate an image with dall-e openai using your description</p>
         </div>
-      ) : (
-        <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>🤓</span>
-          The "purpose" variable from your contract is{" "}
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            {purpose}
-          </span>
-        </div>
-      )}
-
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>🤖</span>
-        An example prop of your balance{" "}
-        <span style={{ fontWeight: "bold", color: "green" }}>({ethers.utils.formatEther(yourLocalBalance)})</span> was
-        passed into the
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          Home.jsx
-        </span>{" "}
-        component from
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          App.jsx
-        </span>
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>💭</span>
-        Check out the <Link to="/hints">"Hints"</Link> tab for more tips.
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>🛠</span>
-        Tinker with your smart contract using the <Link to="/debug">"Debug Contract"</Link> tab.
+        <button className="button" onClick={() => mint()}>
+          mint
+        </button>
       </div>
     </div>
   );

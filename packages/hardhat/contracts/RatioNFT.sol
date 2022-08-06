@@ -13,7 +13,6 @@ contract RatioNFT is ERC721 {
         _safeMint(msg.sender, 1);
     }
 
-
     // function mintUniqueEdition() public {
     //     require(totalMints == 0, "Already minted");
     //     _safeMint(msg.sender, 1);

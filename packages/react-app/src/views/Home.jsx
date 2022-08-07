@@ -35,7 +35,7 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
 
   const mint = async () => {
     if (!title && !description && !amount) return alert("please fill all the fields");
-    if (!localImage && !generatedImage) return alert("please add or generate an image to use as an NFT");
+    // if (!localImage && !generatedImage) return alert("please add or generate an image to use as an NFT");
     // const ERC1155 = RatioFactory.deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken)
 
     //Get URI and NFT

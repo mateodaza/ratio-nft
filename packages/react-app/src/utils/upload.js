@@ -8,15 +8,15 @@ import axios from "axios";
 // // The 'mime' npm package helps us set the correct file type on our File objects
 // const mime = require('mime');
 import mime from "mime";
-
-// // The 'fs' builtin module on Node.js provides access to the file system
-// const fs = require("fs");
-import fs from "fs";
 // const { Blob } = require('buffer');
 // import { Blob } from "buffer";
 // // The 'path' module provides helpers for manipulating filesystem paths
 // const path = require("path");
 import path from "path";
+
+// // The 'fs' builtin module on Node.js provides access to the file system
+const fs = require("fs");
+// import fs from "fs";
 
 // Paste your NFT.Storage API key into the quotes:
 const NFT_STORAGE_KEY = process.env.NFT_STORAGE_KEY;

@@ -1,11 +1,11 @@
 // deploy/00_deploy_your_contract.js
 
 const { ethers } = require("hardhat");
-import {
-  storeNFT,
-  buildIpfsMetadataUrl,
-  buildImageUrl,
-} from "../scripts/upload";
+// import {
+//   storeNFT,
+//   buildIpfsMetadataUrl,
+//   buildImageUrl,
+// } from "../scripts/upload";
 
 const localChainId = "31337";
 
@@ -45,13 +45,13 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const Token = await ethers.getContract("ERC20Mock", deployer);
 
-  const nftMetadata = await storeNFT(
-    "packages/react-app/public/mitch.png",
-    "fake nft",
-    "really fakely",
-    false
-  );
-  const imageUrl = buildImageUrl(nftMetadata.data.image);
+  // const nftMetadata = await storeNFT(
+  //   "packages/react-app/public/mitch.png",
+  //   "fake nft",
+  //   "really fakely",
+  //   false
+  // );
+  // const imageUrl = buildImageUrl(nftMetadata.data.image);
 
   await deploy("RatioNFT", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
@@ -59,7 +59,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     args: [
       "My NFT", // NAME
       "oneNFT", // SYMBOL
-      buildIpfsMetadataUrl(nftMetadata.ipnft), // "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/1.json", // URI
+      // buildIpfsMetadataUrl(nftMetadata.ipnft), // "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/1.json", // URI
+      "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/1.json", // URI
     ],
     log: true,
     waitConfirmations: 5,

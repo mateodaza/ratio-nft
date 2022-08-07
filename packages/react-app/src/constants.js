@@ -10,8 +10,8 @@ export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
 export const ALCHEMY_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 
 export const PAYMENT_TOKENS = {
-  localhost: "",
-  mumbai: "",
+  localhost: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  mumbai: "0x6b15A1104c7Fa74c8f6C7349D5A924C896a6ee44",
 };
 
 const localRpcUrl = process.env.REACT_APP_CODESPACES

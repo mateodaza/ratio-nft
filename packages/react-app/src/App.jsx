@@ -304,6 +304,7 @@ function App(props) {
             readContracts={readContracts}
             writeContracts={writeContracts}
             selectedNetwork={selectedNetwork}
+            tx={tx}
           />
         </Route>
         <Route exact path="/debug">

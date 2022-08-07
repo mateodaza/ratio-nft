@@ -9,7 +9,7 @@ contract RatioFactory is ERC1155Holder {
     mapping(uint256 => address) public indexToContract; //index to contract address mapping
     mapping(uint256 => address) public indexToOwner; //index to ERC1155 owner address
 
-    event ERC1155Created(address owner, address tokenContract); //emitted when ERC1155 token is deployed
+    event ERC1155Created(string contractName, address owner, address tokenContract, address nftAddress, uint nftTokenId, uint _goalAmount, string uri, address paymentToken); //emitted when ERC1155 token is deployed
     event ERC1155Minted(address owner, address tokenContract, uint amount); //emmited when ERC1155 token is minted
 
     /*
@@ -25,7 +25,7 @@ contract RatioFactory is ERC1155Holder {
         tokens.push(t); 
         indexToContract[tokens.length - 1] = address(t);
         indexToOwner[tokens.length - 1] = tx.origin;
-        emit ERC1155Created(msg.sender, address(t));
+        emit ERC1155Created(_contractName, msg.sender, address(t), _nftAddress, _nftTokenId, _goalAmount, _uri, _paymentToken);
         return address(t);
     }
 

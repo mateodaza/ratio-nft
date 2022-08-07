@@ -82,7 +82,7 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
     setGeneratedImage("");
     setAmount("");
   };
-  console.log({ title, description, amount });
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <img
@@ -134,7 +134,6 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
           mint
         </button>
       </div>
-      <button onClick={() => cleanForm()}>clean </button>
     </div>
   );
 }

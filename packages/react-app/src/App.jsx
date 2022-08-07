@@ -29,7 +29,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home, ExampleUI, Hints, Subgraph } from "./views";
+import { Home, Ratios, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -288,7 +288,10 @@ function App(props) {
       />
       <Menu style={{ textAlign: "center", marginTop: 10 }} selectedKeys={[location.pathname]} mode="horizontal">
         <Menu.Item key="/">
-          <Link to="/">App Home</Link>
+          <Link to="/">Create Ratio</Link>
+        </Menu.Item>
+        <Menu.Item key="/ratios">
+          <Link to="/ratios">Ratios</Link>
         </Menu.Item>
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
@@ -315,6 +318,16 @@ function App(props) {
             readContracts={readContracts}
             writeContracts={writeContracts}
             selectedNetwork={selectedNetwork}
+            tx={tx}
+          />
+        </Route>
+        <Route exact path="/ratios">
+          <Ratios
+            yourLocalBalance={yourLocalBalance}
+            readContracts={readContracts}
+            writeContracts={writeContracts}
+            selectedNetwork={selectedNetwork}
+            provider={localProvider}
             tx={tx}
           />
         </Route>

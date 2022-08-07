@@ -103,14 +103,31 @@ const storeNFT = async (imagePathOrUrl, name, description, isExternalimage) => {
   });
 };
 
-// const uploaditbro = async () => {
-//   // const something = await storeNFT('packages/react-app/public/mitch.png','fake nft', 'really fakely', false);
-//   const something = await storeNFT('https://user-images.githubusercontent.com/87873179/144324736-3f09a98e-f5aa-4199-a874-13583bf31951.jpg','fake nft', 'really fakely', true);
+// OPENDALLE
+const generateImage = async () => {
+  const { Configuration, OpenAIApi } = require("openai");
+  const configuration = new Configuration({
+    apiKey: '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',
+  });
+  const openai = new OpenAIApi(configuration);
+  const response = await openai.createCompletion({
+    model: "text-davinci-002",
+    prompt: "Say this is a test",
+    temperature: 0,
+    max_tokens: 6,
+  });
+  return response;
+}
 
-//   // const r = await axios.get(`https://nftstorage.link/ipfs/bafyreihfdjvwpony6aslehzexf4hisq7r2cdrkqyk5g7mqntpdmjhstwcu/metadata.json`);
-//   // const r = await axios.get(`https://nftstorage.link/ipfs/${something.ipnft}/metadata.json`);
+const uploaditbro = async () => {
+  // const something = await storeNFT('packages/react-app/public/mitch.png','fake nft', 'really fakely', false);
+  // const something = await storeNFT('https://user-images.githubusercontent.com/87873179/144324736-3f09a98e-f5aa-4199-a874-13583bf31951.jpg','fake nft', 'really fakely', true);
 
-//   console.log(something);
-// }
+  // const r = await axios.get(`https://nftstorage.link/ipfs/bafyreihfdjvwpony6aslehzexf4hisq7r2cdrkqyk5g7mqntpdmjhstwcu/metadata.json`);
+  // const r = await axios.get(`https://nftstorage.link/ipfs/${something.ipnft}/metadata.json`);
 
-// uploaditbro();
+  const something = await generateImage();
+  console.log(something);
+}
+
+uploaditbro();

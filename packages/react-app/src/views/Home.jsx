@@ -69,8 +69,18 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
     const ERC1155Done = await ERC1155tx.wait();
     const ERC1155Event = ERC1155Done?.events?.find(i => i?.event === "ERC1155Created");
     const ERC1155 = ERC1155Event.args;
-    const ERC1155Address = "";
-    console.log({ ERC1155Event, ERC1155 });
+    const ERC1155Address = ERC1155.tokenContract;
+
+    cleanForm();
+    return alert(`This is your ratio token address: ${ERC1155Address}`);
+  };
+
+  const cleanForm = () => {
+    setTitle(null);
+    setDescription(null);
+    setLocalImage(null);
+    setGeneratedImage(null);
+    setAmount(null);
   };
 
   return (

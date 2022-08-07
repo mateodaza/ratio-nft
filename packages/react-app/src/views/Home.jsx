@@ -76,13 +76,13 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
   };
 
   const cleanForm = () => {
-    setTitle(null);
-    setDescription(null);
-    setLocalImage(null);
-    setGeneratedImage(null);
-    setAmount(null);
+    setTitle("");
+    setDescription("");
+    setLocalImage("");
+    setGeneratedImage("");
+    setAmount("");
   };
-
+  console.log({ title, description, amount });
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <img
@@ -93,18 +93,21 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
       <hr style={{ borderTop: "2px solid lightgray", width: "25%" }} />
       <div style={{ display: "flex", flexDirection: "column", width: "50%", margin: "20px 0", alignItems: "center" }}>
         <input
+          value={title}
           placeholder="nft title"
           className="minimal-input required"
           type="text"
           onChange={e => setTitle(e.target.value)}
         />
         <input
+          value={description}
           placeholder="a very short description"
           className="minimal-input required"
           type="text"
           onChange={e => setDescription(e.target.value)}
         />
         <input
+          value={amount}
           placeholder="dai $"
           className="minimal-input required"
           type="number"
@@ -113,6 +116,7 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
         />
         {!useDallE && (
           <input
+            value={localImage}
             type="file"
             id="image-input"
             accept="image/jpeg, image/png, image/jpg"
@@ -130,6 +134,7 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
           mint
         </button>
       </div>
+      <button onClick={() => cleanForm()}>clean </button>
     </div>
   );
 }

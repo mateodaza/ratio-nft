@@ -1,8 +1,9 @@
 pragma solidity ^0.8.4;
 
+import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "./RatioEdition.sol";
 
-contract RatioFactory {
+contract RatioFactory is ERC1155Holder {
 
     RatioEdition[] public tokens; //an array that contains different ERC1155 tokens deployed
     mapping(uint256 => address) public indexToContract; //index to contract address mapping
@@ -19,8 +20,8 @@ contract RatioFactory {
     _ids - IDs the ERC1155 token should contain
     _name - Names each ID should map to. Case-sensitive.
     */
-    function deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken) public returns (address) {
-        RatioEdition t = new RatioEdition(_contractName, _uri, _goalAmount, _nftAddress, _paymentToken);
+    function deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, uint _nftTokenId, address _paymentToken) public returns (address) {
+        RatioEdition t = new RatioEdition(_contractName, _uri, _goalAmount, _nftAddress, _nftTokenId, _paymentToken);
         tokens.push(t); 
         indexToContract[tokens.length - 1] = address(t);
         indexToOwner[tokens.length - 1] = tx.origin;

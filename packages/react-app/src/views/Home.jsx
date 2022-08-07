@@ -3,6 +3,7 @@ import { useState } from "react";
 import { PAYMENT_TOKENS } from "../constants";
 import { storeNFT, buildIpfsMetadataUrl, buildImageUrl } from "../utils/upload";
 
+const { ethers } = require("ethers");
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
  * @param {*} yourLocalBalance balance on current network
@@ -12,7 +13,7 @@ import { storeNFT, buildIpfsMetadataUrl, buildImageUrl } from "../utils/upload";
 function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts, tx }) {
   // const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
-  const { RatioFactory, RatioNFT } = writeContracts;
+  const { RatioFactory, RatioNFT, NFTFactory } = writeContracts;
 
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
@@ -39,27 +40,37 @@ function Home({ selectedNetwork, yourLocalBalance, readContracts, writeContracts
     // const ERC1155 = RatioFactory.deployERC1155(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken)
 
     //Get URI and NFT
-    const nftMetadata = await storeNFT("packages/react-app/public/mitch.png", "fake nft", "really fakely", false);
-    const imageUrl = buildImageUrl(nftMetadata.data.image);
-    setDisplayImage(imageUrl);
+    // const nftMetadata = await storeNFT("packages/react-app/public/mitch.png", "fake nft", "really fakely", false);
+    // const imageUrl = buildImageUrl(nftMetadata.data.image);
+    // setDisplayImage(imageUrl);
 
-    const uri = buildIpfsMetadataUrl(nftMetadata.ipnft);
+    // const uri = buildIpfsMetadataUrl(nftMetadata.ipnft);
+
+    const uri =
+      "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/1.json";
 
     // CREATE NFT
-
-    const NFT = tx(new RatioNFT("RATIONFT", "RNFT", uri), result => {
-      console.log({ result });
-    });
-    console.log({ NFT });
+    const NFTtx = await NFTFactory.mint(uri);
+    const NFTDone = await NFTtx.wait();
+    const NFTEvent = NFTDone?.events?.find(i => i?.event === "CreatedNFT");
+    const NFT = NFTEvent.args; // tokenId (BigNumber), tokenURI
+    const NFTAddress = NFTEvent.address;
+    console.log({ NFTAddress, tID: NFT.tokenId.toNumber() });
     // SET CALL AND MINT ERC1155
-    const nftAddress = "";
-    const ERC1155 = RatioFactory.deployERC1155(
+    const ERC1155tx = await RatioFactory.deployERC1155(
       title,
-      uri,
-      amount * 10 ** 18,
-      nftAddress,
+      NFT.tokenURI,
+      ethers.BigNumber.from(amount),
+      NFTAddress,
+      NFT.tokenId.toNumber(),
       PAYMENT_TOKENS[selectedNetwork],
+      { gasLimit: 10000000 },
     );
+    const ERC1155Done = await ERC1155tx.wait();
+    const ERC1155Event = ERC1155Done?.events?.find(i => i?.event === "ERC1155Created");
+    const ERC1155 = ERC1155Event.args;
+    const ERC1155Address = "";
+    console.log({ ERC1155Event, ERC1155 });
   };
 
   return (

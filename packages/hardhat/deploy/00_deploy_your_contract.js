@@ -53,6 +53,13 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // );
   // const imageUrl = buildImageUrl(nftMetadata.data.image);
 
+  await deploy("NFTFactory", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    log: true,
+    waitConfirmations: 5,
+  });
+
   await deploy("RatioNFT", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
@@ -76,6 +83,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
       "https://gateway.pinata.cloud/ipfs/QmTN32qBKYqnyvatqfnU8ra6cYUGNxpYziSddCatEmopLR/metadata/api/item/",
       10,
       NFT.address,
+      1,
       Token.address,
     ],
     log: true,

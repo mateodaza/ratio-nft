@@ -16,6 +16,7 @@ contract RatioEdition is ERC1155, Ownable {
     uint public totalRaised;
     bool public goalMet = false;
     address public nft;
+    uint public nftTokenId;
     address paymentToken; // Fake DAI 
     address rewardToken;
 
@@ -27,10 +28,11 @@ contract RatioEdition is ERC1155, Ownable {
     /*
     constructor is executed when the factory contract calls its own deployERC1155 method
     */
-    constructor(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, address _paymentToken) ERC1155(_uri) {
+    constructor(string memory _contractName, string memory _uri, uint _goalAmount, address _nftAddress, uint _nftTokenId, address _paymentToken) ERC1155(_uri) {
         names = ["NFT", "FRACTIONS"];
         ids = [0, 1];
         nft = _nftAddress;
+        nftTokenId = _nftTokenId;
         paymentToken = _paymentToken;
         goalAmount = _goalAmount;
         createMapping();
